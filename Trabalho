@@ -1,0 +1,83 @@
+import math
+dados = open("dadostp.txt" , "r")
+#Declaração das Listas
+lista = []
+x = []
+y = []
+#Declaração das Variáveis
+ne = 0
+n = 0
+temperatura = 34.5
+
+#Leitura, apuração geração de uma lista de strings provenientes dos caracteres das linhas
+for linha in dados.readlines():
+    n = n+1
+    #Transformação das linhas em colunas e caracteres dos strings para números reais
+    for coluna in linha.split():
+        lista.append(float(coluna))
+        ne = ne+1
+        
+for i in range(0,ne,2):
+    #Adiciona cada valor contido nas novas colunas criadas referente à temperatura à lista " x "      
+    x.append(lista[i])
+    #Adiciona cada valor referente à precipitação à lista " y "
+    y.append(lista[i+1])
+
+#Função que soma todos os valores de x (Temperatura)
+def somadorx (n):
+    resp = 0
+    for i in range(n):
+        resp = resp + (x[i])
+    return resp
+
+#Soma todos os valores de y (Precipitação)
+def somadory(n):
+    resp = 0
+    for i in range(n):
+        resp = resp + (y[i])
+    return resp
+
+#Função que soma de todos os valores de x elevados ao quadrado
+def somadorx2(n):
+    resp = 0
+    for i in range(n):
+        resp = resp + (x[i]**2)
+    return resp
+#Função que soma de todos os valores de y elvados ao quadrado
+def somadory2(n):
+    resp = 0
+    for i in range(n):
+        resp = resp + (y[i]**2)
+    return resp
+#Soma de todas as multiplicações de cada elemento de x com seu correspondente em y
+def somadorxy(n):
+    resp = 0
+    for i in range(n):
+        resp = resp + (x[i])*(y[i])
+    return resp
+
+        
+    
+#Calcula o coeficiente da equação da reta utilizando os parâmetros previamente calculados
+a = ((n*somadorxy(n))-(somadorx(n)*somadory(n)))/(n*somadorx2(n)-(somadorx(n)**2))
+#Calcula o coeficiente b (termo indenpdente) da equação da reta utilizando os parâmetros previamente calculados
+b = (somadory(n)*somadorx2(n)-somadorx(n)*somadorxy(n))/(n*somadorx2(n)-(somadorx(n))**2)
+#Calcula o coeficiente de correlação da equação da reta utilizando os parâmetros previamente calculados
+R = (n*somadorxy(n)-somadorx(n)*somadory(n))/(math.sqrt(n*somadorx2(n)-(somadorx(n))**2)*math.sqrt(n*somadory2(n)-(somadory(n))**2))
+
+#Impressão dos coeficientes
+print(f"Coeficiente a: {a:5.3f}")
+print(f"Coeficiente b: {b:5.3f}")
+print(f"Coeficiente de Correlação: {R:5.3f} \n")
+
+#Impressão dos títulos
+print(f"Temperatura (graus centígrados) {' '*5} Precipitação (mm)\n")
+
+while temperatura <= 44:
+    #Cálculo da precipitação
+    precipitação = (a*temperatura+b)
+    #Impressão dos valores da temperatura entre 34.5°C até 44°C (variando em 0,5°C) e suas respectivas previsões de precipitação 
+    print(f"{' '*10}{temperatura:5.2f}{' '*28}{precipitação:5.2f}")
+    temperatura = temperatura + 0.5
+    
+    
